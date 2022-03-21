@@ -3,7 +3,7 @@ import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Expense, Income} from 'pages';
 import {Button} from 'components';
-import {BLACK, GREY1, RED, WHITE} from 'styles/colors';
+import {BLACK, GREEN, GREY1, PRIMARY, RED, WHITE} from 'styles/colors';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -43,6 +43,7 @@ const MyTabBar = ({state, descriptors, navigation, position}) => {
 
         return (
           <TouchableOpacity
+            key={index}
             accessibilityRole="button"
             accessibilityState={isFocused ? {selected: true} : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -53,7 +54,13 @@ const MyTabBar = ({state, descriptors, navigation, position}) => {
               text={label}
               onPress={onPress}
               buttonStyle={styles.tabStyle}
-              backgroundColor={isFocused ? RED : GREY1}
+              backgroundColor={
+                isFocused && index === 0
+                  ? RED
+                  : isFocused && index === 1
+                  ? GREEN
+                  : GREY1
+              }
               textColor={isFocused ? WHITE : BLACK}
               borderRadius={10}
               width="90%"
@@ -80,6 +87,7 @@ const NavHome = () => {
         component={Income}
         options={{
           tabBarLabel: 'Pemasukan',
+          tabBarActiveTintColor: PRIMARY,
         }}
       />
     </Tab.Navigator>

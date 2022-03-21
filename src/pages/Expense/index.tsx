@@ -10,9 +10,31 @@ import IconScan from 'assets/images/ic_scan.svg';
 import IconPlus from 'assets/images/ic_plus.svg';
 import IconMinus from 'assets/images/ic_minus.svg';
 import IconCalendar from 'assets/images/ic_calendar.svg';
+import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
+import {CategorySheet} from 'layouts';
+import {category, sources} from 'services/constants';
+import SourceExpenseSheet from 'layouts/SourceExpenseSheet';
+
+interface CategoryProps {
+  id: string;
+  name: string;
+  color: string;
+  isChecked: boolean;
+}
 
 const Expense = () => {
   const [sumber, setSumber] = useState('');
+
+  const [categoryList, setCategoryList] = useState(category);
+  const [sourceList, setSourceList] = useState(sources);
+
+  const [selectedCategory, setSelectedCategory] = useState<any>({
+    id: 1,
+    name: '',
+    color: '',
+  });
+
+  const [selectedSource, setSelectedSource] = useState('');
   return (
     <View style={styles.container}>
       <View style={styles.body}>
@@ -25,12 +47,30 @@ const Expense = () => {
             <Input
               placeholder="Pilih Kategori"
               placeholderTextColor={GREY1}
-              value=""
+              value={selectedCategory.name}
               onChangeText={() => {}}
-              iconRight={<IconDown />}
+              editable={false}
+              iconLeft={
+                selectedCategory.color !== '' && (
+                  <View
+                    style={[
+                      styles.dot,
+                      {backgroundColor: selectedCategory.color},
+                    ]}
+                  />
+                )
+              }
+              iconRight={
+                <IconDown onPress={() => SheetManager.show('category')} />
+              }
               backgroundColor={WHITE}
               containerBorderWidth={1}
               containerBorderColor={GREY1}
+            />
+            <CategorySheet
+              id="category"
+              data={categoryList}
+              onSelected={item => setSelectedCategory(item)}
             />
           </View>
           <View style={styles.section}>
@@ -56,12 +96,19 @@ const Expense = () => {
             <Input
               placeholder="Pilih Sumber Pengeluaran"
               placeholderTextColor={GREY1}
-              value=""
+              value={selectedSource}
               onChangeText={() => {}}
-              iconRight={<IconDown />}
+              iconRight={
+                <IconDown onPress={() => SheetManager.show('sources')} />
+              }
               backgroundColor={WHITE}
               containerBorderWidth={1}
               containerBorderColor={GREY1}
+            />
+            <SourceExpenseSheet
+              id="sources"
+              data={sourceList}
+              onSelected={item => setSelectedSource(item.name)}
             />
           </View>
           <View style={styles.section}>
@@ -148,5 +195,10 @@ const styles = StyleSheet.create({
   },
   mb8: {
     marginBottom: 8,
+  },
+  dot: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
   },
 });
