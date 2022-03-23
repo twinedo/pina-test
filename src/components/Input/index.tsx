@@ -41,6 +41,7 @@ const Input: FC<InputProp> = props => {
         },
       ]}>
       {iconLeft}
+
       <TextInput
         {...props}
         style={[styles.input, inputStyle]}
@@ -49,6 +50,7 @@ const Input: FC<InputProp> = props => {
         value={value}
         onChangeText={onChangeText}
       />
+
       {iconRight}
     </View>
   );

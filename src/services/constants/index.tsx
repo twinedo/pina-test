@@ -654,3 +654,68 @@ export const bankList = [
     code: '911',
   },
 ];
+
+export const Months = [
+  {
+    id: 1,
+    name: 'Jan',
+    format: '01',
+  },
+  {
+    id: 2,
+    name: 'Feb',
+    format: '02',
+  },
+  {
+    id: 3,
+    name: 'Mar',
+    format: '03',
+  },
+  {
+    id: 4,
+    name: 'Apr',
+    format: '04',
+  },
+  {
+    id: 5,
+    name: 'May',
+    format: '05',
+  },
+  {
+    id: 6,
+    name: 'Jun',
+    format: '06',
+  },
+  {
+    id: 7,
+    name: 'Jul',
+    format: '07',
+  },
+  {
+    id: 8,
+    name: 'Aug',
+    format: '08',
+  },
+  {
+    id: 9,
+    name: 'Sep',
+    format: '09',
+  },
+  {
+    id: 10,
+    name: 'Oct',
+    format: '10',
+  },
+  {
+    id: 11,
+    name: 'Nov',
+    format: '11',
+  },
+  {
+    id: 12,
+    name: 'Dec',
+    format: '12',
+  },
+];
+
+export const years = ['2020', '2021', '2022'];

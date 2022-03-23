@@ -11,9 +11,9 @@ import IconPlus from 'assets/images/ic_plus.svg';
 import IconMinus from 'assets/images/ic_minus.svg';
 import IconCalendar from 'assets/images/ic_calendar.svg';
 import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
-import {CategorySheet} from 'layouts';
+import {CategorySheet, SourceExpenseSheet, DateSheet} from 'layouts';
 import {category, sources} from 'services/constants';
-import SourceExpenseSheet from 'layouts/SourceExpenseSheet';
+import moment from 'moment';
 
 interface CategoryProps {
   id: string;
@@ -35,6 +35,45 @@ const Expense = () => {
   });
 
   const [selectedSource, setSelectedSource] = useState('');
+
+  const [valueExpense, setValueExpense] = useState<any>(0);
+  const [formattedValue, setFormattedValue] = useState<any>('');
+  const [selectedDate, setSelectedDate] = useState('');
+
+  const formatted = (value: number) => {
+    return value.toLocaleString('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+    });
+  };
+
+  function currencyFormat(num: number) {
+    return 'IDR' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+  }
+
+  const _onPlusValueExp = () => {
+    setValueExpense(valueExpense + 10000);
+    setFormattedValue(formatted(valueExpense + 10000));
+  };
+
+  const _onMinusValueExp = () => {
+    if (valueExpense <= 10000) {
+      setValueExpense(0);
+      setFormattedValue(formatted(0));
+    }
+    if (valueExpense > 10000) {
+      setValueExpense(valueExpense - 10000);
+      setFormattedValue(formatted(valueExpense - 10000));
+    }
+  };
+
+  const _onChangeValue = (value: string) => {
+    console.log('value', value);
+    // setValueExpense(parseInt(value));
+    // setFormattedValue(formatted(parseInt(value)));
+    // setValueExpense(value);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.body}>
@@ -112,14 +151,15 @@ const Expense = () => {
             />
           </View>
           <View style={styles.section}>
-            <TextBold style={styles.mb8}>Sumber Pengeluaran</TextBold>
+            <TextBold style={styles.mb8}>Jumlah Pengeluaran</TextBold>
             <Input
-              placeholder="IDR 0"
+              placeholder="Rp 0"
               placeholderTextColor={GREY1}
-              value={sumber}
-              onChangeText={text => setSumber(text)}
-              iconRight={<IconPlus />}
-              iconLeft={<IconMinus />}
+              value={valueExpense}
+              keyboardType="numeric"
+              onChangeText={text => _onChangeValue(text)}
+              iconRight={<IconPlus onPress={_onPlusValueExp} />}
+              iconLeft={<IconMinus onPress={_onMinusValueExp} />}
               backgroundColor={WHITE}
               containerBorderWidth={1}
               containerBorderColor={GREY1}
@@ -131,12 +171,19 @@ const Expense = () => {
             <Input
               placeholder="01 Januari 1990"
               placeholderTextColor={GREY1}
-              value={sumber}
-              onChangeText={text => setSumber(text)}
-              iconRight={<IconCalendar />}
+              value={selectedDate}
+              onChangeText={() => {}}
+              editable={false}
+              iconRight={
+                <IconCalendar onPress={() => SheetManager.show('date-sheet')} />
+              }
               backgroundColor={WHITE}
               containerBorderWidth={1}
               containerBorderColor={GREY1}
+            />
+            <DateSheet
+              id="date-sheet"
+              onSelected={date => setSelectedDate(date)}
             />
           </View>
         </ScrollView>
