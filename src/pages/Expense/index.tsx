@@ -1,10 +1,17 @@
-import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
-import {BLACK, GREY1, PRIMARY, TERTIERY, WHITE} from 'styles/colors';
+import {BLACK, BLUE, GREY1, PRIMARY, TERTIERY, WHITE} from 'styles/colors';
 import Logo from 'assets/images/logo.svg';
 import IconCamera from 'assets/images/ic_camera.svg';
 import {Button, Input} from 'components';
-import {TextBold} from 'styles/text-styles';
+import {TextBold, TextMedium} from 'styles/text-styles';
 import IconDown from 'assets/images/ic_chevron_down.svg';
 import IconScan from 'assets/images/ic_scan.svg';
 import IconPlus from 'assets/images/ic_plus.svg';
@@ -14,6 +21,7 @@ import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import {CategorySheet, SourceExpenseSheet, DateSheet} from 'layouts';
 import {category, sources} from 'services/constants';
 import moment from 'moment';
+import * as Progress from 'react-native-progress';
 
 interface CategoryProps {
   id: string;
@@ -21,6 +29,8 @@ interface CategoryProps {
   color: string;
   isChecked: boolean;
 }
+
+const {width} = Dimensions.get('window');
 
 const Expense = () => {
   const [sumber, setSumber] = useState('');
@@ -34,44 +44,32 @@ const Expense = () => {
     color: '',
   });
 
-  const [selectedSource, setSelectedSource] = useState('');
+  const [selectedSource, setSelectedSource] = useState({
+    id: '',
+    name: '',
+    icon: '',
+    isChecked: false,
+  });
 
-  const [valueExpense, setValueExpense] = useState<any>(0);
-  const [formattedValue, setFormattedValue] = useState<any>('');
+  const [valueExpense, setValueExpense] = useState<any>('');
   const [selectedDate, setSelectedDate] = useState('');
-
-  const formatted = (value: number) => {
-    return value.toLocaleString('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-    });
-  };
-
-  function currencyFormat(num: number) {
-    return 'IDR' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-  }
 
   const _onPlusValueExp = () => {
     setValueExpense(valueExpense + 10000);
-    setFormattedValue(formatted(valueExpense + 10000));
   };
 
   const _onMinusValueExp = () => {
     if (valueExpense <= 10000) {
       setValueExpense(0);
-      setFormattedValue(formatted(0));
     }
     if (valueExpense > 10000) {
       setValueExpense(valueExpense - 10000);
-      setFormattedValue(formatted(valueExpense - 10000));
     }
   };
 
-  const _onChangeValue = (value: string) => {
-    console.log('value', value);
-    // setValueExpense(parseInt(value));
-    // setFormattedValue(formatted(parseInt(value)));
-    // setValueExpense(value);
+  const _onChangeValue = (value: any) => {
+    const strToInt = parseInt(value, 10);
+    setValueExpense(strToInt);
   };
 
   return (
@@ -90,14 +88,16 @@ const Expense = () => {
               onChangeText={() => {}}
               editable={false}
               iconLeft={
-                selectedCategory.color !== '' && (
-                  <View
-                    style={[
-                      styles.dot,
-                      {backgroundColor: selectedCategory.color},
-                    ]}
-                  />
-                )
+                <>
+                  {selectedCategory.color !== '' && (
+                    <View
+                      style={[
+                        styles.dot,
+                        {backgroundColor: selectedCategory.color},
+                      ]}
+                    />
+                  )}
+                </>
               }
               iconRight={
                 <IconDown onPress={() => SheetManager.show('category')} />
@@ -135,8 +135,15 @@ const Expense = () => {
             <Input
               placeholder="Pilih Sumber Pengeluaran"
               placeholderTextColor={GREY1}
-              value={selectedSource}
+              value={selectedSource.name}
               onChangeText={() => {}}
+              iconLeft={
+                <>
+                  {selectedSource.name !== '' && (
+                    <Image source={selectedSource.icon} style={styles.icon} />
+                  )}
+                </>
+              }
               iconRight={
                 <IconDown onPress={() => SheetManager.show('sources')} />
               }
@@ -147,7 +154,7 @@ const Expense = () => {
             <SourceExpenseSheet
               id="sources"
               data={sourceList}
-              onSelected={item => setSelectedSource(item.name)}
+              onSelected={item => setSelectedSource(item)}
             />
           </View>
           <View style={styles.section}>
@@ -155,7 +162,7 @@ const Expense = () => {
             <Input
               placeholder="Rp 0"
               placeholderTextColor={GREY1}
-              value={valueExpense}
+              value={valueExpense.toString()}
               keyboardType="numeric"
               onChangeText={text => _onChangeValue(text)}
               iconRight={<IconPlus onPress={_onPlusValueExp} />}
@@ -186,6 +193,30 @@ const Expense = () => {
               onSelected={date => setSelectedDate(date)}
             />
           </View>
+          {selectedCategory.name !== '' && (
+            <View style={styles.section}>
+              <TextBold style={styles.mb8}>
+                Sisa Budget {selectedCategory.name}
+              </TextBold>
+              <View style={{alignItems: 'center'}}>
+                <Progress.Bar
+                  progress={0.72}
+                  width={width - 44}
+                  height={30}
+                  borderRadius={15}
+                  borderWidth={0}
+                  color={BLUE}
+                  useNativeDriver
+                  unfilledColor={GREY1}
+                />
+                <View style={styles.barContainer}>
+                  <TextMedium style={{color: WHITE}}>
+                    3.250.000 / 4.500.000
+                  </TextMedium>
+                </View>
+              </View>
+            </View>
+          )}
         </ScrollView>
       </View>
       <View style={styles.footer}>
@@ -247,5 +278,18 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 8,
+  },
+  icon: {
+    width: 30,
+    height: 30,
+  },
+  barContainer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

@@ -5,11 +5,11 @@ import {BLACK, GREY1, GREY2} from 'styles/colors';
 
 interface InputProp {
   iconLeft?: React.ReactNode;
-  iconRight?: React.ReactNode | boolean;
+  iconRight?: boolean | React.ReactNode;
   props?: TextInputProps;
   placeholder?: string;
   placeholderTextColor?: typeof GREY2 | string;
-  value: string;
+  value: any;
   onChangeText: (event: string) => void;
   backgroundColor?: string;
   containerBorderWidth?: number;
