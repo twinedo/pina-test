@@ -78,7 +78,7 @@ const Expense = () => {
         <ScrollView
           contentContainerStyle={{flexGrow: 1}}
           showsVerticalScrollIndicator={false}>
-          <Logo />
+          <Logo style={styles.mb8} />
           <View style={styles.section}>
             <TextBold style={styles.mb8}>Pilih Kategori</TextBold>
             <Input
@@ -182,14 +182,16 @@ const Expense = () => {
               onChangeText={() => {}}
               editable={false}
               iconRight={
-                <IconCalendar onPress={() => SheetManager.show('date-sheet')} />
+                <IconCalendar
+                  onPress={() => SheetManager.show('date-sheet-expense')}
+                />
               }
               backgroundColor={WHITE}
               containerBorderWidth={1}
               containerBorderColor={GREY1}
             />
             <DateSheet
-              id="date-sheet"
+              id="date-sheet-expense"
               onSelected={date => setSelectedDate(date)}
             />
           </View>
