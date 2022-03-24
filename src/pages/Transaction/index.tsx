@@ -1,6 +1,5 @@
 import {
   Pressable,
-  ScrollView,
   SectionList,
   StatusBar,
   StyleSheet,
@@ -9,21 +8,10 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {transactions} from 'services/constants';
-import {
-  useNavigation,
-  useNavigationState,
-  useRoute,
-} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {Input, Toolbar} from 'components';
-import {
-  BLACK,
-  GREY2,
-  PRIMARY,
-  SECONDARY,
-  TOURQUISE,
-  WHITE,
-} from 'styles/colors';
+import {BLACK, GREY2, SECONDARY, TOURQUISE, WHITE} from 'styles/colors';
 import IconSort from 'assets/images/ic_sort.svg';
 import IconFilter from 'assets/images/ic_filter.svg';
 import {TextBold} from 'styles/text-styles';
@@ -198,6 +186,5 @@ const styles = StyleSheet.create({
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent: 'space-between',
   },
 });

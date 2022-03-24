@@ -17,26 +17,16 @@ import IconScan from 'assets/images/ic_scan.svg';
 import IconPlus from 'assets/images/ic_plus.svg';
 import IconMinus from 'assets/images/ic_minus.svg';
 import IconCalendar from 'assets/images/ic_calendar.svg';
-import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
+import {SheetManager} from 'react-native-actions-sheet';
 import {CategorySheet, SourceExpenseSheet, DateSheet} from 'layouts';
 import {category, sources} from 'services/constants';
-import moment from 'moment';
 import * as Progress from 'react-native-progress';
-
-interface CategoryProps {
-  id: string;
-  name: string;
-  color: string;
-  isChecked: boolean;
-}
 
 const {width} = Dimensions.get('window');
 
 const Income = () => {
-  const [sumber, setSumber] = useState('');
-
-  const [categoryList, setCategoryList] = useState(category);
-  const [sourceList, setSourceList] = useState(sources);
+  const [categoryList] = useState(category);
+  const [sourceList] = useState(sources);
 
   const [selectedCategory, setSelectedCategory] = useState<any>({
     id: 1,
@@ -50,6 +40,8 @@ const Income = () => {
     icon: '',
     isChecked: false,
   });
+
+  const [merchant, setMerchant] = useState('');
 
   const [valueExpense, setValueExpense] = useState<any>('');
   const [selectedDate, setSelectedDate] = useState('');
@@ -125,8 +117,10 @@ const Income = () => {
             <Input
               placeholder="Ketik Merchant"
               placeholderTextColor={GREY1}
-              value=""
-              onChangeText={() => {}}
+              value={merchant}
+              onChangeText={(text: string) => {
+                setMerchant(text);
+              }}
               backgroundColor={WHITE}
               containerBorderWidth={1}
               containerBorderColor={GREY1}
@@ -137,11 +131,24 @@ const Income = () => {
             <Input
               placeholder="Pilih Sumber Pengeluaran"
               placeholderTextColor={GREY1}
-              value={selectedSource.name}
+              value={
+                selectedSource.name !== undefined
+                  ? selectedSource.name
+                  : 'Bank - ' +
+                    selectedSource.bank +
+                    ' ' +
+                    selectedSource.number
+              }
               onChangeText={() => {}}
               iconLeft={
                 <>
-                  {selectedSource.name !== '' && (
+                  {selectedSource.name === undefined && (
+                    <Image
+                      source={require('assets/images/ic_bank.png')}
+                      style={styles.icon}
+                    />
+                  )}
+                  {selectedSource.name !== undefined && (
                     <Image source={selectedSource.icon} style={styles.icon} />
                   )}
                 </>
@@ -164,7 +171,11 @@ const Income = () => {
             <Input
               placeholder="Rp 0"
               placeholderTextColor={GREY1}
-              value={valueExpense.toString()}
+              value={
+                selectedSource.amount !== undefined
+                  ? selectedSource.amount.toString()
+                  : valueExpense.toString()
+              }
               keyboardType="numeric"
               onChangeText={text => _onChangeValue(text)}
               iconRight={<IconPlus onPress={_onPlusValueExp} />}
@@ -231,7 +242,27 @@ const Income = () => {
           text="Tambah"
           borderRadius={10}
           buttonStyle={styles.btnPlus}
-          backgroundColor={GREY1}
+          disabled={
+            selectedCategory?.name !== '' &&
+            merchant !== '' &&
+            (selectedSource.name !== '' || selectedSource.amount > 0) &&
+            (valueExpense > 0 || selectedSource.amount > 0) &&
+            selectedDate !== ''
+              ? false
+              : true
+          }
+          onPress={() => {
+            alert('Tambah Data Berhasil');
+          }}
+          backgroundColor={
+            selectedCategory?.name !== '' &&
+            merchant !== '' &&
+            (selectedSource.name !== '' || selectedSource.amount > 0) &&
+            (valueExpense > 0 || selectedSource.amount > 0) &&
+            selectedDate !== ''
+              ? PRIMARY
+              : GREY1
+          }
           textColor={BLACK}
         />
       </View>

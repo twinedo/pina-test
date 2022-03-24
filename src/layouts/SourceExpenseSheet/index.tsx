@@ -1,11 +1,9 @@
-import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Image, Pressable, StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
 import {GREY1} from 'styles/colors';
 import IconCheck from 'assets/images/ic_check.svg';
 import {TextBold} from 'styles/text-styles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
 
 interface SourceExpenseProps {
@@ -118,8 +116,7 @@ const SourceExpenseSheet = (props: SourceExpenseSheetProps) => {
               style={styles.bankRef}
               onPress={() => _onPressBankRef(i)}
               key={v.id}>
-              <View
-                style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+              <View style={styles.bankRefChild}>
                 <Image source={v.icon} style={styles.icon} />
                 <TextBold style={{marginLeft: 10}}>
                   {v.name} {v.number}
@@ -174,4 +171,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
   },
+  bankRefChild: {flex: 1, flexDirection: 'row', alignItems: 'center'},
 });

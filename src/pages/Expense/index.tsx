@@ -17,26 +17,16 @@ import IconScan from 'assets/images/ic_scan.svg';
 import IconPlus from 'assets/images/ic_plus.svg';
 import IconMinus from 'assets/images/ic_minus.svg';
 import IconCalendar from 'assets/images/ic_calendar.svg';
-import ActionSheet, {SheetManager} from 'react-native-actions-sheet';
+import {SheetManager} from 'react-native-actions-sheet';
 import {CategorySheet, SourceExpenseSheet, DateSheet} from 'layouts';
 import {category, sources} from 'services/constants';
-import moment from 'moment';
 import * as Progress from 'react-native-progress';
-
-interface CategoryProps {
-  id: string;
-  name: string;
-  color: string;
-  isChecked: boolean;
-}
 
 const {width} = Dimensions.get('window');
 
 const Expense = () => {
-  const [sumber, setSumber] = useState('');
-
-  const [categoryList, setCategoryList] = useState(category);
-  const [sourceList, setSourceList] = useState(sources);
+  const [categoryList] = useState(category);
+  const [sourceList] = useState(sources);
 
   const [selectedCategory, setSelectedCategory] = useState<any>({
     id: 1,

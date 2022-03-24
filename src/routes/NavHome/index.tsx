@@ -1,4 +1,4 @@
-import {Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Expense, Income} from 'pages';
@@ -7,10 +7,10 @@ import {BLACK, GREEN, GREY1, PRIMARY, RED, WHITE} from 'styles/colors';
 
 const Tab = createMaterialTopTabNavigator();
 
-const MyTabBar = ({state, descriptors, navigation, position}) => {
+const MyTabBar = ({state, descriptors, navigation}: any) => {
   return (
     <View style={{flexDirection: 'row'}}>
-      {state.routes.map((route, index) => {
+      {state.routes.map((route: any, index: number) => {
         const {options} = descriptors[route.key];
         const label =
           options.tabBarLabel !== undefined
