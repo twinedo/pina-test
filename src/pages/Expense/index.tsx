@@ -51,6 +51,8 @@ const Expense = () => {
     isChecked: false,
   });
 
+  const [merchant, setMerchant] = useState('');
+
   const [valueExpense, setValueExpense] = useState<any>('');
   const [selectedDate, setSelectedDate] = useState('');
 
@@ -100,14 +102,16 @@ const Expense = () => {
                 </>
               }
               iconRight={
-                <IconDown onPress={() => SheetManager.show('category')} />
+                <IconDown
+                  onPress={() => SheetManager.show('category-expense')}
+                />
               }
               backgroundColor={WHITE}
               containerBorderWidth={1}
               containerBorderColor={GREY1}
             />
             <CategorySheet
-              id="category"
+              id="category-expense"
               data={categoryList}
               onSelected={item => setSelectedCategory(item)}
             />
@@ -123,8 +127,10 @@ const Expense = () => {
             <Input
               placeholder="Ketik Merchant"
               placeholderTextColor={GREY1}
-              value=""
-              onChangeText={() => {}}
+              value={merchant}
+              onChangeText={(text: string) => {
+                setMerchant(text);
+              }}
               backgroundColor={WHITE}
               containerBorderWidth={1}
               containerBorderColor={GREY1}
@@ -135,24 +141,39 @@ const Expense = () => {
             <Input
               placeholder="Pilih Sumber Pengeluaran"
               placeholderTextColor={GREY1}
-              value={selectedSource.name}
+              value={
+                selectedSource.name !== undefined
+                  ? selectedSource.name
+                  : 'Bank - ' +
+                    selectedSource.bank +
+                    ' ' +
+                    selectedSource.number
+              }
               onChangeText={() => {}}
               iconLeft={
                 <>
-                  {selectedSource.name !== '' && (
+                  {selectedSource.name === undefined && (
+                    <Image
+                      source={require('assets/images/ic_bank.png')}
+                      style={styles.icon}
+                    />
+                  )}
+                  {selectedSource.name !== undefined && (
                     <Image source={selectedSource.icon} style={styles.icon} />
                   )}
                 </>
               }
               iconRight={
-                <IconDown onPress={() => SheetManager.show('sources')} />
+                <IconDown
+                  onPress={() => SheetManager.show('sources-expense')}
+                />
               }
               backgroundColor={WHITE}
               containerBorderWidth={1}
               containerBorderColor={GREY1}
             />
             <SourceExpenseSheet
-              id="sources"
+              id="sources-expense"
               data={sourceList}
               onSelected={item => setSelectedSource(item)}
             />
@@ -162,7 +183,11 @@ const Expense = () => {
             <Input
               placeholder="Rp 0"
               placeholderTextColor={GREY1}
-              value={valueExpense.toString()}
+              value={
+                selectedSource.amount !== undefined
+                  ? selectedSource.amount.toString()
+                  : valueExpense.toString()
+              }
               keyboardType="numeric"
               onChangeText={text => _onChangeValue(text)}
               iconRight={<IconPlus onPress={_onPlusValueExp} />}
@@ -229,7 +254,27 @@ const Expense = () => {
           text="Tambah"
           borderRadius={10}
           buttonStyle={styles.btnPlus}
-          backgroundColor={GREY1}
+          disabled={
+            selectedCategory?.name !== '' &&
+            merchant !== '' &&
+            (selectedSource.name !== '' || selectedSource.amount > 0) &&
+            (valueExpense > 0 || selectedSource.amount > 0) &&
+            selectedDate !== ''
+              ? false
+              : true
+          }
+          onPress={() => {
+            alert('Tambah Data Berhasil');
+          }}
+          backgroundColor={
+            selectedCategory?.name !== '' &&
+            merchant !== '' &&
+            (selectedSource.name !== '' || selectedSource.amount > 0) &&
+            (valueExpense > 0 || selectedSource.amount > 0) &&
+            selectedDate !== ''
+              ? PRIMARY
+              : GREY1
+          }
           textColor={BLACK}
         />
       </View>

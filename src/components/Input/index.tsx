@@ -78,4 +78,9 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   placeholderTextColor: PropTypes.string,
   value: PropTypes.any,
+  onChangeText: PropTypes.any,
+  backgroundColor: PropTypes.string,
+  containerBorderWidth: PropTypes.number,
+  containerBorderColor: PropTypes.string,
+  inputStyle: PropTypes.any,
 };

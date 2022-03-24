@@ -6,6 +6,7 @@ const WHITE = '#FFFFFF';
 
 const GREY1 = '#D8D8D8'; //disabled
 const GREY2 = '#9E9E9E'; //text
+const TOURQUISE = '#E6EEEF'; //border
 
 const BLUE = '#52CEF5';
 const GREEN = '#7BCC29';
@@ -24,4 +25,5 @@ export {
   GREEN,
   PURPLE,
   RED,
+  TOURQUISE,
 };

@@ -719,3 +719,90 @@ export const Months = [
 ];
 
 export const years = ['2020', '2021', '2022'];
+
+export const transactions = [
+  {
+    id: 1,
+    date: '03 November 2021',
+    summary: 3700000,
+    data: [
+      {
+        id: 11,
+        detail: 'TARIKAN ATM 02/11 537941303836099',
+        bank: 'BCA',
+        amount: 1000000,
+        number: 38486515131,
+      },
+      {
+        id: 12,
+        detail: 'TARIKAN ATM 02/11 537941303836099',
+        bank: 'BCA',
+        amount: 2500000,
+        number: 38486515131,
+      },
+      {
+        id: 13,
+        detail: 'TARIKAN ATM 02/11 537941303836099',
+        bank: 'BCA',
+        amount: 200000,
+        number: 38486515131,
+      },
+    ],
+  },
+  {
+    id: 2,
+    date: '02 November 2021',
+    summary: 5000000,
+    data: [
+      {
+        id: 21,
+        detail: 'TARIKAN ATM 02/11 537941303836099',
+        bank: 'BCA',
+        amount: 1000000,
+        number: 38486515131,
+      },
+      {
+        id: 22,
+        detail: 'TARIKAN ATM 02/11 537941303836099',
+        bank: 'BCA',
+        amount: 2500000,
+        number: 38486515131,
+      },
+      {
+        id: 23,
+        detail: 'TARIKAN ATM 02/11 537941303836099',
+        bank: 'BCA',
+        amount: 1500000,
+        number: 38486515131,
+      },
+    ],
+  },
+  {
+    id: 3,
+    date: '01 November 2021',
+    summary: 3600000,
+    data: [
+      {
+        id: 31,
+        detail: 'TARIKAN ATM 02/11 537941303836099',
+        bank: 'BCA',
+        amount: 600000,
+        number: 38486515131,
+      },
+      {
+        id: 32,
+        detail: 'TARIKAN ATM 02/11 537941303836099',
+        bank: 'BCA',
+        amount: 1000000,
+        number: 38486515131,
+      },
+      {
+        id: 33,
+        detail: 'TARIKAN ATM 02/11 537941303836099',
+        bank: 'BCA',
+        amount: 2000000,
+        number: 38486515131,
+      },
+    ],
+  },
+];

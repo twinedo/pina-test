@@ -6,6 +6,7 @@ import IconCheck from 'assets/images/ic_check.svg';
 import {TextBold} from 'styles/text-styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import {useNavigation} from '@react-navigation/native';
 
 interface SourceExpenseProps {
   id: string | number;
@@ -22,6 +23,7 @@ interface SourceExpenseSheetProps {
 
 const SourceExpenseSheet = (props: SourceExpenseSheetProps) => {
   const {id, data, onSelected} = props;
+  const navigation = useNavigation();
 
   const [source, setSource] = useState(data);
 
@@ -29,20 +31,22 @@ const SourceExpenseSheet = (props: SourceExpenseSheetProps) => {
     setSource(data);
   }, [data]);
 
-  const bankList = [
+  const [bankList, setBankList] = useState([
     {
       id: 1,
       name: 'BCA',
       number: '1234567890',
       icon: require('assets/images/ic_bca.png'),
+      isChecked: false,
     },
     {
       id: 2,
       name: 'BNI',
       number: '1234567890',
       icon: require('assets/images/ic_bni.png'),
+      isChecked: false,
     },
-  ];
+  ]);
 
   const _onPress = (item: SourceExpenseProps, index: number) => {
     let dat = [...source];
@@ -56,10 +60,45 @@ const SourceExpenseSheet = (props: SourceExpenseSheetProps) => {
     });
     setSource(join);
     onSelected(item);
+    let banks = [...bankList];
+    banks.forEach((i: any) => (i.isChecked = false));
+    setBankList(banks);
     SheetManager.hide(id);
   };
 
-  const renderItem = ({item, index}) => {
+  const _onPressBankRef = (childIndex: number) => {
+    let dat = [...bankList];
+    dat[childIndex].isChecked = !dat[childIndex].isChecked;
+    const unCheckedFilter = dat.filter((_: any, i) => i !== childIndex);
+    unCheckedFilter.forEach((i: any) => (i.isChecked = false));
+    const join = [dat[childIndex], ...unCheckedFilter];
+    join.sort((a, b) => {
+      return a.id - b.id;
+    });
+    setBankList(join);
+    let sour = [...source];
+
+    sour.forEach((o: any, i) => {
+      if (i !== 1) {
+        o.isChecked = false;
+      } else {
+        o.isChecked = true;
+      }
+    });
+    setSource(sour);
+    setTimeout(() => {
+      navigation.navigate('Transaction', {_onCallback});
+    }, 1000);
+  };
+
+  const _onCallback = (params: any) => {
+    console.log('params onCallback', params);
+    const selected = params.data.find(item => item.isChecked);
+    console.log('selected', selected);
+    onSelected(selected);
+  };
+
+  const renderItem = ({item, index}: any) => {
     return (
       <>
         <Pressable
@@ -74,15 +113,19 @@ const SourceExpenseSheet = (props: SourceExpenseSheetProps) => {
           {item.isChecked && <IconCheck width={20} height={20} />}
         </Pressable>
         {item.id === 2 &&
-          bankList.map(v => (
+          bankList.map((v, i) => (
             <Pressable
               style={styles.bankRef}
-              onPress={() => _onPress(item + v, index)}
+              onPress={() => _onPressBankRef(i)}
               key={v.id}>
-              <Image source={v.icon} style={styles.icon} />
-              <TextBold style={{marginLeft: 10}}>
-                {v.name} {v.number}
-              </TextBold>
+              <View
+                style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                <Image source={v.icon} style={styles.icon} />
+                <TextBold style={{marginLeft: 10}}>
+                  {v.name} {v.number}
+                </TextBold>
+              </View>
+              {v.isChecked && <IconCheck width={20} height={20} />}
             </Pressable>
           ))}
       </>
@@ -92,7 +135,7 @@ const SourceExpenseSheet = (props: SourceExpenseSheetProps) => {
   return (
     <ActionSheet id={id}>
       <View style={styles.container}>
-        <TextBold>Pilih Kategori</TextBold>
+        <TextBold>Pilih Sumber Pengeluaran</TextBold>
         <FlatList
           data={source}
           keyExtractor={(item: any) => item.id.toString()}
@@ -127,6 +170,7 @@ const styles = StyleSheet.create({
   bankRef: {
     marginLeft: 30,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 12,
   },

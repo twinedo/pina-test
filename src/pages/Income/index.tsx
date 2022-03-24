@@ -100,14 +100,16 @@ const Income = () => {
                 </>
               }
               iconRight={
-                <IconDown onPress={() => SheetManager.show('category')} />
+                <IconDown
+                  onPress={() => SheetManager.show('category-income')}
+                />
               }
               backgroundColor={WHITE}
               containerBorderWidth={1}
               containerBorderColor={GREY1}
             />
             <CategorySheet
-              id="category"
+              id="category-income"
               data={categoryList}
               onSelected={item => setSelectedCategory(item)}
             />
@@ -145,14 +147,14 @@ const Income = () => {
                 </>
               }
               iconRight={
-                <IconDown onPress={() => SheetManager.show('sources')} />
+                <IconDown onPress={() => SheetManager.show('sources-income')} />
               }
               backgroundColor={WHITE}
               containerBorderWidth={1}
               containerBorderColor={GREY1}
             />
             <SourceExpenseSheet
-              id="sources"
+              id="sources-income"
               data={sourceList}
               onSelected={item => setSelectedSource(item)}
             />

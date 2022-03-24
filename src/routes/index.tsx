@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Home, SplashScreen} from 'pages';
+import {Home, SplashScreen, Transaction} from 'pages';
 
 export type RoutesParam = {
   SplashScreen: undefined;
   Home: undefined;
+  Transaction: undefined;
 };
 
 const Stack = createStackNavigator<RoutesParam>();
 
 const Routes = () => {
-  const {Navigator, Screen} = Stack;
+  const {Navigator, Screen, Group} = Stack;
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,7 +26,10 @@ const Routes = () => {
       {isLoading ? (
         <Screen name="SplashScreen" component={SplashScreen} />
       ) : (
-        <Screen name="Home" component={Home} />
+        <Group>
+          <Screen name="Home" component={Home} />
+          <Screen name="Transaction" component={Transaction} />
+        </Group>
       )}
     </Navigator>
   );
